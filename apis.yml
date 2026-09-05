@@ -1,23 +1,152 @@
 aid: wizehire
 name: WizeHire
-description: 'WizeHire is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: Wizehire is a Houston, Texas hiring platform for small and mid-size businesses that combines an applicant
+  tracking system with AI candidate matching (Talent Match), an AI recruiting assistant delivered as a Chrome extension
+  (Scout), DISC+ personality and skills assessments, candidate texting, interview scheduling, expert human hiring
+  coaches, and employee onboarding. Job posts syndicate to 100+ boards including Indeed, LinkedIn and ZipRecruiter,
+  and the platform connects to HRIS, payroll, background-check and e-signature systems — ADP Workforce Now, RUN
+  Powered by ADP, Ceridian Dayforce, Gusto, Paychex, Paycor, Paylocity, UKG, QuickBooks, Checkr and Dropbox Sign
+  — plus Zapier and real-estate CRMs via a customer-issued API key. Wizehire serves real estate, insurance, dental,
+  legal, automotive and hospitality operators, and publishes an NYC Local Law 144 AEDT bias audit for its automated
+  employment decision tooling.
+image: https://wizehire.com/wp-content/uploads/2026/08/homepage-preview.png
 url: https://raw.githubusercontent.com/api-evangelist/wizehire/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-source-url: https://forgeglobal.com/wizehire_stock/
 specificationVersion: '0.20'
 created: '2026-09-04'
 modified: '2026-09-04'
+position: Producing
 tags:
-- Company
-apis: []
+- Hiring
+- Recruiting
+- Applicant Tracking
+- Human Resources
+- Talent Assessment
+- Small Business
+- Artificial Intelligence
+- Job Boards
+- Onboarding
+- HR Tech
+tags_raw:
+- hiring
+- recruiting
+- applicant-tracking
+- human-resources
+- talent-assessment
+- small-business
+- artificial-intelligence
+- job-boards
+- onboarding
+- hr-tech
+apis:
+- name: Wizehire Scout Service API
+  description: 'Backend service for the Wizehire Scout Chrome extension — the AI recruiting assistant. Five operations
+    over HTTP Bearer auth: a streaming (Server-Sent Events) agent chat endpoint that runs a LangGraph-backed recruiting
+    agent with human-in-the-loop resume support, top-candidate retrieval by fit score for a job, single-application
+    detail lookup, and interview scheduling proxied through to the Wizehire ATS. Published as OpenAPI 3.1.0 at the
+    service host root.'
+  humanURL: https://scout.wizehire.com/docs
+  baseURL: https://scout.wizehire.com
+  tags:
+  - Artificial Intelligence
+  - Recruiting
+  - Applicant Tracking
+  - Talent Assessment
+  - Hiring
+  tags_raw:
+  - artificial-intelligence
+  - recruiting
+  - applicant-tracking
+  - talent-assessment
+  - hiring
+  properties:
+  - type: OpenAPI
+    url: openapi/wizehire-scout-service-openapi.yml
+  - type: APIReference
+    url: https://scout.wizehire.com/docs
+  - type: Overlay
+    url: overlays/wizehire-scout-service-overlay.yaml
+  - type: Authentication
+    url: authentication/wizehire-authentication.yml
+  - type: Conventions
+    url: conventions/wizehire-conventions.yml
+  - type: ErrorCatalog
+    url: errors/wizehire-problem-types.yml
+  - type: DataModel
+    url: data-model/wizehire-data-model.yml
+  image: https://wizehire.com/wp-content/uploads/2026/08/homepage-preview.png
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/wizehire-agentic-access.yml
+- type: DomainSecurity
+  url: security/wizehire-domain-security.yml
 - type: Website
-  url: https://forgeglobal.com/wizehire_stock/
+  url: https://wizehire.com/
+- type: Documentation
+  url: https://help.wizehire.com/en/
+- type: Support
+  url: https://help.wizehire.com/en/
+- type: Blog
+  url: https://wizehire.com/blog
+- type: BlogRSS
+  url: https://wizehire.com/blog/feed/
+- type: Pricing
+  url: https://wizehire.com/pricing
+- type: SignUp
+  url: https://wizehire.com/signup
+- type: Login
+  url: https://wizehire.com/login
+- type: TermsOfService
+  url: https://wizehire.com/terms
+- type: PrivacyPolicy
+  url: https://wizehire.com/privacy-policy
+- type: GitHubOrganization
+  url: https://github.com/WizeHire
+- type: LLMsTxt
+  url: llms/wizehire-llms.txt
+- type: DeveloperPortal
+  url: https://help.wizehire.com/en/collections/2120794-integrations-tools
+- type: APIReference
+  url: https://scout.wizehire.com/docs
+- type: GettingStarted
+  url: https://wizehire.com/how-it-works
+- type: Compliance
+  url: https://wizehire.com/gdpr
+- type: OpenAPI
+  url: openapi/wizehire-scout-service-openapi.yml
+- type: Overlay
+  url: overlays/wizehire-scout-service-overlay.yaml
+- type: Authentication
+  url: authentication/wizehire-authentication.yml
+- type: Conventions
+  url: conventions/wizehire-conventions.yml
+- type: ErrorCatalog
+  url: errors/wizehire-problem-types.yml
+- type: DataModel
+  url: data-model/wizehire-data-model.yml
+- type: Lifecycle
+  url: lifecycle/wizehire-lifecycle.yml
+- type: Conformance
+  url: conformance/wizehire-conformance.yml
+- type: Packages
+  url: packages/wizehire-packages.yml
+- type: Plans
+  url: plans/wizehire-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/wizehire-rate-limits.yml
+- type: MCPServer
+  url: mcp/wizehire-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-09-04'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v3

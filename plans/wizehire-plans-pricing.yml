@@ -1,0 +1,83 @@
+generated: '2026-09-04'
+method: searched
+source: https://wizehire.com/pricing
+source_status: 200
+note: Read from the public pricing page on 2026-09-04. Prices are for the hiring platform subscription. Wizehire
+  sells no API product and prices no API tier - the Scout Service API backs the Scout Chrome extension, which
+  is bundled into the platform, and the customer-issued API key used for Zapier and CRM connections is not
+  separately metered or priced.
+currency: USD
+billing_period: month
+annual_discount: Two months free when paid annually.
+plan_count: 3
+plans:
+- name: Quickstart
+  price: 249
+  currency: USD
+  period: month
+  public: true
+  limits:
+    active_job_postings: 3
+    active_markets: 1
+  included:
+  - Posts to 100+ job boards
+  - 350+ job description templates
+  - Career page builder
+  - AI recruiting assistant (Scout) access
+  - Applicant tracking
+  note: Pause anytime.
+- name: Growth
+  price: 549
+  currency: USD
+  period: month
+  public: true
+  most_popular: true
+  limits:
+    active_job_postings: 6
+    active_markets: 2
+  included:
+  - Everything in Quickstart
+  - Talent Relationship Management
+  - Custom screening questions
+  - Candidate texting
+  - Dedicated support
+  - Full payroll integrations
+  - Analytics
+- name: Concierge
+  price: null
+  price_model: custom
+  currency: USD
+  period: month
+  public: false
+  limits:
+    active_job_postings: custom
+    active_markets: flexible
+  included:
+  - Everything in Growth
+  - Personalized onboarding
+  - Custom interview guides
+  - Dedicated strategic relationship manager
+  - EEO & OFCCP compliance
+  - Advanced integrations
+  note: Contact sales; no published price.
+add_ons:
+- name: Additional job
+  price: 99
+  currency: USD
+  period: month
+- name: Additional location
+  price: 349
+  currency: USD
+  period: month
+- name: Reactivation
+  price: 249
+  currency: USD
+  period: month
+free_tier: false
+trial:
+  offered: false
+  note: No free trial is advertised on the pricing page.
+api_pricing:
+  metered: false
+  published: false
+  note: No API call quota, overage rate or developer tier is published at any tier.

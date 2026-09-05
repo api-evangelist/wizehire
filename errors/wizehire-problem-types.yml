@@ -1,0 +1,77 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/wizehire-scout-service-openapi.yml
+format: fastapi-validation
+rfc9457: false
+note: >-
+  Derived from the declared 4xx/5xx responses in the Scout Service OpenAPI. Wizehire publishes no error
+  reference page, so nothing here is enriched from documentation. The catalogue is deliberately short
+  because the contract itself is: the framework's validation error is the ONLY error any of the five
+  operations declares.
+
+envelope:
+  media_type: application/json
+  schema: HTTPValidationError
+  shape: '{"detail": [{"loc": ["body", "apply_id"], "msg": "...", "type": "...", "input": ..., "ctx": {}}]}'
+  fields:
+  - name: detail
+    type: array of ValidationError
+  - name: detail[].loc
+    type: array of string|integer
+    description: Path to the offending field, e.g. ["body", "apply_id"]
+  - name: detail[].msg
+    type: string
+    description: Human-readable message
+  - name: detail[].type
+    type: string
+    description: Pydantic error type slug
+  - name: detail[].input
+    description: The value that failed validation
+  - name: detail[].ctx
+    type: object
+    description: Error-type-specific context
+
+problems:
+- status: 422
+  title: Validation Error
+  schema: HTTPValidationError
+  media_type: application/json
+  description: >-
+    Request failed Pydantic validation — a required field is missing, or a value is the wrong type or
+    outside its enum. Deterministic: the same request always fails the same way, so it is safe to treat
+    as non-retryable without a change to the payload.
+  remediation: Read detail[].loc to find the field, correct it, and resend. Do not retry unchanged.
+  source_operations:
+  - openapi/wizehire-scout-service-openapi.yml#agentChat
+  - openapi/wizehire-scout-service-openapi.yml#get_top_applies_v1_candidates_top__job_key__get
+  - openapi/wizehire-scout-service-openapi.yml#get_apply_details_v1_candidates__apply_id__get
+  - openapi/wizehire-scout-service-openapi.yml#schedule_interview_v1_interviews_schedule_post
+
+undeclared:
+  note: >-
+    These are the statuses a consumer will certainly meet that the contract does not describe. Recorded
+    as a gap, not invented as entries — an agent cannot distinguish an expired token from a deleted
+    candidate from a throttle without out-of-band knowledge.
+  missing:
+  - status: 401
+    why: Four of five operations require HTTPBearer; no 401 response is declared on any of them.
+  - status: 403
+    why: No authorization-failure shape is declared.
+  - status: 404
+    why: >-
+      GET /v1/candidates/{apply_id} and GET /v1/candidates/top/{job_key} take caller-supplied
+      identifiers; a miss has no declared response.
+  - status: 429
+    why: No throttling response or rate-limit signal is declared. See rate-limits/wizehire-rate-limits.yml.
+  - status: '5xx'
+    why: No server-error shape is declared, including on the SSE streaming agent endpoint.
+
+observed_errors:
+  note: Statuses observed live on unauthenticated probes of the service host, 2026-09-04.
+  probes:
+  - path: /
+    status: 404
+    body: '{"detail":"Not Found"}'
+  - path: /swagger.json
+    status: 404
+    body: '{"detail":"Not Found"}'

@@ -1,0 +1,46 @@
+# generated: '2026-09-04'
+# method: generated
+# source: openapi/_original/wizehire-scout-service-openapi.json
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Wizehire Scout Service API
+  version: 1.0.0
+extends: openapi/wizehire-scout-service-openapi.yml
+actions:
+- target: $.info
+  description: >-
+    Record provenance. The document was fetched verbatim from https://scout.wizehire.com/openapi.json
+    on 2026-09-04 (HTTP 200, application/json). Wizehire publishes no separate developer portal for it.
+  update:
+    x-apievangelist-source: https://scout.wizehire.com/openapi.json
+    x-apievangelist-fetched: '2026-09-04'
+    x-apievangelist-original: openapi/_original/wizehire-scout-service-openapi.json
+- target: $
+  description: >-
+    Add servers[]. The published document carries no servers block (FastAPI default), so a consumer
+    reading the raw spec cannot tell what host to call. The URL below is the host the spec was served
+    from — it is an observation, not a claim Wizehire published it.
+  update:
+    servers:
+    - url: https://scout.wizehire.com
+      description: Scout Service production host (the host this specification was fetched from)
+- target: $
+  description: >-
+    Add descriptions to the four tags the operations already reference. The published document declares
+    no tags[] block, only per-operation tag strings.
+  update:
+    tags:
+    - name: health
+      description: Service health probe
+    - name: agent
+      description: Scout AI recruiting agent conversation
+    - name: candidates
+      description: Candidate / application retrieval
+    - name: interviews
+      description: Interview scheduling (proxied to the Wizehire ATS)
+- target: $.paths['/healthz'].get
+  description: >-
+    Mark the health probe as the one unauthenticated operation. The published document applies
+    HTTPBearer per-operation to the other four and omits it here.
+  update:
+    x-apievangelist-auth-required: false

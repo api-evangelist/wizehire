@@ -64,5 +64,28 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-WizeHire is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/wizehire_stock/
+Wizehire is a Houston, Texas hiring platform for small and mid-size businesses, combining an applicant
+tracking system with AI candidate matching (Talent Match), an AI recruiting assistant delivered as a Chrome
+extension (Scout), DISC+ assessments, candidate texting, interview scheduling, human hiring coaches, and
+employee onboarding.
+
+## API surface
+
+Wizehire runs no developer programme — there is no developer portal, no public API reference, no SDK, no
+CLI, and no MCP server. It does, however, serve one real machine-readable contract:
+
+- **Scout Service API** — OpenAPI 3.1.0, five operations, live at
+  [`https://scout.wizehire.com/openapi.json`](https://scout.wizehire.com/openapi.json) with a Swagger UI at
+  [`/docs`](https://scout.wizehire.com/docs). It is the backend for the Scout Chrome extension: a streaming
+  agent-chat endpoint with a human-in-the-loop approval gate declared in the contract itself, top-candidate
+  retrieval by fit score, application detail lookup, and interview scheduling proxied to the ATS. HTTP
+  Bearer auth on four of the five operations.
+
+Two further surfaces exist but are not machine-readable: a per-customer API key issued in the Wizehire
+dashboard (Settings → Integrations) used to connect Zapier and real-estate CRMs, and three applicant
+lifecycle triggers published on Zapier's catalogue rather than by Wizehire.
+
+Wizehire publishes an NYC Local Law 144 AEDT bias audit, linked from its own site footer as "AI AEDT Audit".
+
+- Website: https://wizehire.com/
+- Secondary-market listing this profile was seeded from: https://forgeglobal.com/wizehire_stock/

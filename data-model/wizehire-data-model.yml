@@ -1,0 +1,225 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/wizehire-scout-service-openapi.yml
+note: 'Entity graph derived from components.schemas and the id-reference fields in the Scout Service OpenAPI.
+  Wizehire publishes no object reference, so no id prefixes or domain notes could be searched. The graph is
+  small and lopsided on purpose: the contract''s request schemas are fully specified while every 200 response
+  schema is empty ({}), so the shapes an agent RECEIVES - a candidate, an application, an interview - are
+  not described anywhere in the contract. Those are recorded under implied_entities and were not invented.'
+entities:
+- name: AgentChatRequest
+  kind: request
+  description: One turn of conversation with the Scout recruiting agent.
+  fields:
+  - name: message
+    type: string|null
+    note: Optional only on a resumed turn
+  - name: session_id
+    type: string|null
+    note: Client-minted UUID; doubles as the LangGraph thread_id
+  - name: context
+    type: AgentContext|null
+  - name: conversation_history
+    type: array<HistoryMessage>|null
+  - name: resume
+    type: ResumePayload|null
+- name: AgentContext
+  kind: value
+  description: Page context sent by the Scout Chrome extension about what the recruiter is looking at.
+  fields:
+  - name: job_key
+    type: string|null
+    reference: Job
+  - name: apply_id
+    type: integer|null
+    reference: Application
+  - name: user_id
+    type: integer|null
+    reference: User
+  - name: page
+    type: string|null
+  - name: candidate_name
+    type: string|null
+  - name: job_title
+    type: string|null
+  - name: registry_set
+    type: string|null
+  - name: quick_replies
+    type: array<QuickReply>|null
+- name: HistoryMessage
+  kind: value
+  description: A prior-turn message replayed by the client. role is one of user / assistant / tool; an assistant
+    message may carry tool_calls, a tool message carries tool_call_id.
+  fields:
+  - name: role
+    type: 'enum: user | assistant | tool'
+    required: true
+  - name: content
+    type: string|null
+  - name: tool_calls
+    type: array<HistoryToolCall>|null
+  - name: tool_call_id
+    type: string|null
+    reference: HistoryToolCall.id
+- name: HistoryToolCall
+  kind: value
+  description: A tool invocation recorded in the conversation history.
+  fields:
+  - name: id
+    type: string
+    required: true
+  - name: name
+    type: string
+    required: true
+  - name: args
+    type: object
+- name: QuickReply
+  kind: value
+  fields:
+  - name: label
+    type: string
+    required: true
+  - name: value
+    type: string
+    required: true
+- name: ResumePayload
+  kind: value
+  description: Client approval to resume an agent turn paused for human review. v1 contract - any resume means
+    "approved, continue"; value is reserved and passed verbatim into LangGraph Command(resume=...).
+  fields:
+  - name: value
+    type: object
+- name: ScheduleInterviewRequest
+  kind: request
+  fields:
+  - name: apply_id
+    type: integer
+    required: true
+    reference: Application
+  - name: interview_type
+    type: InterviewType
+    required: true
+- name: InterviewType
+  kind: enum
+  values:
+  - phone
+  - video
+  - in_person
+- name: HealthResponse
+  kind: response
+  fields:
+  - name: status
+    type: string
+    default: ok
+  - name: environment
+    type: string
+    required: true
+- name: HTTPValidationError
+  kind: error
+  fields:
+  - name: detail
+    type: array<ValidationError>
+- name: ValidationError
+  kind: error
+  fields:
+  - name: loc
+    type: array<string|integer>
+    required: true
+  - name: msg
+    type: string
+    required: true
+  - name: type
+    type: string
+    required: true
+  - name: input
+    type: any
+  - name: ctx
+    type: object
+implied_entities:
+  note: Named by identifier fields and path parameters but never given a schema in the contract. Listed so
+    the gap is visible; no field list is asserted for any of them because none is published.
+  entities:
+  - name: Job
+    identified_by: job_key (string)
+    seen_in:
+    - GET /v1/candidates/top/{job_key}
+    - AgentContext.job_key
+  - name: Application
+    identified_by: apply_id (integer)
+    seen_in:
+    - GET /v1/candidates/{apply_id}
+    - AgentContext.apply_id
+    - ScheduleInterviewRequest.apply_id
+  - name: Candidate
+    identified_by: reached through apply_id
+    seen_in:
+    - GET /v1/candidates/top/{job_key} (top candidates by fit score)
+    - AgentContext.candidate_name
+  - name: User
+    identified_by: user_id (integer)
+    seen_in:
+    - AgentContext.user_id
+  - name: Interview
+    identified_by: not exposed
+    seen_in:
+    - POST /v1/interviews/schedule
+    note: The scheduling response schema is empty, so no interview identifier is returned to the caller.
+relationships:
+- from: AgentChatRequest
+  to: AgentContext
+  kind: has_one
+  via: context
+- from: AgentChatRequest
+  to: HistoryMessage
+  kind: has_many
+  via: conversation_history
+- from: AgentChatRequest
+  to: ResumePayload
+  kind: has_one
+  via: resume
+- from: AgentContext
+  to: QuickReply
+  kind: has_many
+  via: quick_replies
+- from: AgentContext
+  to: Job
+  kind: belongs_to
+  via: job_key
+- from: AgentContext
+  to: Application
+  kind: belongs_to
+  via: apply_id
+- from: AgentContext
+  to: User
+  kind: belongs_to
+  via: user_id
+- from: HistoryMessage
+  to: HistoryToolCall
+  kind: has_many
+  via: tool_calls
+- from: HistoryMessage
+  to: HistoryToolCall
+  kind: belongs_to
+  via: tool_call_id
+- from: ScheduleInterviewRequest
+  to: Application
+  kind: belongs_to
+  via: apply_id
+- from: ScheduleInterviewRequest
+  to: InterviewType
+  kind: has_one
+  via: interview_type
+- from: Job
+  to: Application
+  kind: has_many
+  via: job_key -> top candidates
+- from: HTTPValidationError
+  to: ValidationError
+  kind: has_many
+  via: detail
+coverage:
+  schemas_defined: 11
+  request_schemas_complete: 3
+  response_schemas_empty: 4
+  gap: Four of the five operations declare a 200 response with an empty schema. Only /healthz returns a typed
+    body. The contract therefore describes what to SEND but not what comes BACK.

@@ -1,0 +1,75 @@
+generated: '2026-09-04'
+method: searched
+source: registry.npmjs.org, pypi.org, rubygems.org, crates.io, packagist.org, github.com/WizeHire, wizehire.com
+  and help.wizehire.com - all searched 2026-09-04
+package_count: 0
+official_sdk_count: 0
+packages: []
+note: 'Wizehire ships no client libraries. Every registry was queried and each returned an honest zero, so
+  no version:/published: fields appear below - there is nothing to date.'
+registries_searched:
+- registry: npm
+  query: wizehire
+  results: 0
+  endpoint: https://registry.npmjs.org/-/v1/search?text=wizehire
+- registry: pypi
+  query: wizehire, wizehire-api
+  results: 0
+  endpoint: https://pypi.org/pypi/wizehire/json
+  status: 404
+- registry: rubygems
+  query: wizehire
+  results: 0
+  endpoint: https://rubygems.org/api/v1/search.json?query=wizehire
+- registry: crates.io
+  query: wizehire
+  results: 0
+  endpoint: https://crates.io/api/v1/crates?q=wizehire
+- registry: packagist
+  query: wizehire
+  results: 0
+  note: One unrelated result (wirehive/vmwarephp) - a fuzzy match on a different company, not counted.
+- registry: maven-central
+  query: wizehire
+  results: 0
+- registry: nuget
+  query: wizehire
+  results: 0
+- registry: pkg.go.dev
+  query: wizehire
+  results: 0
+github_org:
+  url: https://github.com/WizeHire
+  public_repos: 3
+  created: '2018-06-05'
+  repos:
+  - name: juicy-html
+    language: HTML
+    fork: true
+    description: A custom element that lets you load HTML partials into your Web page.
+    first_party: false
+    note: A fork of an unrelated third-party web component. Not a Wizehire client library.
+  - name: rambler
+    language: Go
+    fork: true
+    description: A simple and language-independent SQL schema migration tool
+    first_party: false
+    note: A fork of a third-party migration tool. Internal infrastructure, not an SDK.
+  - name: mantine
+    language: TypeScript
+    fork: true
+    description: Wizehire fork of the fully featured React components library
+    first_party: false
+    note: Explicitly a fork of Mantine for internal UI. Named for Wizehire but not a Wizehire API client,
+      and not published to npm under a Wizehire scope.
+  finding: The public GitHub org contains three forks of third-party projects and nothing Wizehire authored.
+    No SDK, no CLI, no API examples, no OpenAPI. The GitHubOrganization pointer is emitted because the org
+    is real and public; no SDKs pointer is emitted because there are no SDKs.
+integration_surface:
+  note: What stands in for an SDK at Wizehire is a customer-issued API key plus a partner integration. Help-centre
+    articles direct users to Account Settings > Integrations to copy their API key, which is then pasted into
+    Zapier or a real-estate CRM (BoomTown, CINC, Follow Up Boss, Chime, LionDesk). There is no library to
+    install and no endpoint reference to code against.
+  evidence:
+  - https://help.wizehire.com/en/articles/2628723-can-i-connect-my-crm-to-wizehire-using-zapier
+  - https://help.wizehire.com/en/collections/2120794-integrations-tools

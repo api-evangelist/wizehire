@@ -1,0 +1,164 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/wizehire-scout-service-openapi.yml
+note: >-
+  Derived from the Scout Service OpenAPI 3.1.0 document. Wizehire publishes no written API conventions
+  guide, no developer portal and no public API reference beyond the FastAPI-generated Swagger UI at
+  https://scout.wizehire.com/docs, so everything below is read out of the contract itself. Fields the
+  contract does not settle are recorded as unknown rather than assumed.
+
+authentication:
+  style: http-bearer
+  header: 'Authorization: Bearer <token>'
+  scheme_name: HTTPBearer
+  applied_to:
+  - agentChat
+  - get_top_applies_v1_candidates_top__job_key__get
+  - get_apply_details_v1_candidates__apply_id__get
+  - schedule_interview_v1_interviews_schedule_post
+  unauthenticated:
+  - healthz
+  token_issuance: >-
+    Not documented publicly. The service backs the Scout Chrome extension, so the bearer token is
+    obtained through the authenticated Wizehire web session rather than a self-serve developer console.
+  detail: authentication/wizehire-authentication.yml
+
+idempotency:
+  coverage: none
+  supported: false
+  header: null
+  scope: []
+  retention: null
+  evidence: >-
+    No Idempotency-Key parameter, header or requestBody field appears anywhere in the contract, and no
+    public documentation describes replay protection. Two of the five operations mutate state
+    (agentChat, which drives an agent that can act, and
+    schedule_interview_v1_interviews_schedule_post, which books an interview on the ATS), and neither carries a client-supplied idempotency key. A retried POST
+    /v1/interviews/schedule is not protected from booking a second interview.
+
+pagination:
+  style: none
+  evidence: >-
+    GET /v1/candidates/top/{job_key} returns a top-N candidate set with no limit, offset, cursor or
+    page parameter, and no pagination fields in the response schema (the 200 response schema is empty).
+    There is no collection endpoint that pages.
+
+streaming:
+  supported: true
+  operation: agentChat
+  transport: server-sent-events
+  evidence: >-
+    POST /v1/agent/chat is described as "Returns Server-Sent Events (SSE) with the agent's response,
+    including text deltas and tool use notifications." The declared 200 content type in the contract is
+    application/json with an empty schema, so the SSE event shapes are not machine-readable — an agent
+    consuming this endpoint has to parse the stream against prose.
+
+conversation_state:
+  session_key: session_id
+  evidence: >-
+    AgentChatRequest.session_id is "a stable ID grouping all messages in one chat thread... Also
+    doubles as the LangGraph thread_id so paused turns can resume." The client mints the UUID.
+  history: >-
+    conversation_history[] is client-supplied on every request (HistoryMessage with role user/assistant/tool,
+    optional tool_calls and tool_call_id). The service does not require server-side history retrieval.
+
+human_in_the_loop:
+  supported: true
+  mechanism: >-
+    An agent turn can pause for human review. The client resumes it by re-POSTing to /v1/agent/chat with
+    a ResumePayload in `resume` and the same session_id as the paused turn, so the LangGraph checkpointer
+    can find the state. ResumePayload documents its v1 contract explicitly: "any resume means 'approved,
+    continue.'" `message` is optional only on a resumed turn.
+  significance: >-
+    This is a first-class approval gate inside the contract — unusual, and worth noting for an AI hiring
+    product operating under NYC Local Law 144.
+
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+request_tracing:
+  header: null
+  evidence: >-
+    No request-id / correlation-id header is declared in the contract. Observability is described as
+    landing in Langfuse (AgentChatRequest.session_id references "Langfuse's Sessions view"), but that is
+    the provider's internal tracing, not a client-readable request identifier.
+
+versioning:
+  scheme: uri-path
+  current: v1
+  evidence: Four of five paths are prefixed /v1/; /healthz is unversioned.
+  info_version: 0.1.0
+  note: >-
+    info.version is 0.1.0 while the URI path says v1. The contract carries no version-negotiation header
+    and no published deprecation policy.
+
+error_envelope:
+  format: fastapi-validation
+  problem_json: false
+  shape: '{"detail": [{"loc": [...], "msg": "...", "type": "...", "input": ..., "ctx": {...}}]}'
+  evidence: >-
+    The only declared error response across all five operations is 422 Validation Error, typed to
+    HTTPValidationError. It is application/json, not application/problem+json — the contract does not
+    conform to RFC 9457. No 401, 403, 404, 429 or 5xx response is declared on any operation, including
+    the four that require a bearer token, so an agent has no machine-readable contract for an auth
+    failure or a missing candidate.
+  detail: errors/wizehire-problem-types.yml
+
+rate_limit_signaling:
+  headers: []
+  status_on_exhaustion: null
+  evidence: >-
+    No rate-limit headers are declared in the contract and Wizehire publishes no rate-limit
+    documentation. See rate-limits/wizehire-rate-limits.yml.
+  detail: rate-limits/wizehire-rate-limits.yml
+
+reversibility:
+  grade: none
+  applicable: true
+  note: >-
+    The API has a write surface, so reversibility applies — it is not `na`. No reversal operation exists
+    in the contract and Wizehire documents no window.
+  write_surface:
+  - operation: schedule_interview_v1_interviews_schedule_post
+    method: POST
+    path: /v1/interviews/schedule
+    effect: >-
+      Books an interview (phone, video or in_person) against an application, proxied through to the
+      Wizehire ATS. The candidate is notified — Wizehire's help centre documents interview invitations
+      and reminders sent to job seekers — so the effect is externally visible the moment it lands.
+    reversal_operation: null
+    reversal_window: null
+    grade: none
+    evidence: >-
+      The contract exposes no cancel, reschedule, void or delete operation for an interview. Undoing a
+      booked interview requires the Wizehire web application; the API cannot take it back. An agent
+      calling this operation cannot roll back its own action through the same interface it used to act.
+  - operation: agentChat
+    method: POST
+    path: /v1/agent/chat
+    effect: >-
+      Runs the Scout recruiting agent, which invokes tools (HistoryToolCall is part of the contract) and
+      can therefore cause side effects beyond the conversation.
+    reversal_operation: null
+    reversal_window: null
+    grade: none
+    evidence: >-
+      No undo path. The mitigating control is preventive rather than corrective: a turn can pause for
+      human approval before acting (see human_in_the_loop above), which stops an action rather than
+      reversing one.
+  reversal_windows_documented: false
+  caution: >-
+    No window is asserted here because Wizehire states none. Absence of a documented window is the
+    finding.
+
+dry_run_mode:
+  supported: false
+  evidence: No test mode, dry-run flag, simulate parameter or sandbox host appears in the contract or docs.
+
+cross_links:
+  authentication: authentication/wizehire-authentication.yml
+  errors: errors/wizehire-problem-types.yml
+  lifecycle: lifecycle/wizehire-lifecycle.yml
+  rate_limits: rate-limits/wizehire-rate-limits.yml
+  data_model: data-model/wizehire-data-model.yml

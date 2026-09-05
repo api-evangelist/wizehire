@@ -1,0 +1,197 @@
+generated: '2026-09-04'
+method: probed
+source: live probes of the closed /.well-known/ + apis.json path list on every Wizehire host in the record
+summary: 'Five hosts probed against the full named path list. Exactly one path returned 200 with a real document,
+  and it does not belong to Wizehire: help.wizehire.com is an Intercom-hosted help centre, and the security.txt
+  it serves is Intercom''s own (Contact bugcrowd.com/intercom and security@intercom.com, Canonical https://app.intercom.com/.well-known/security.txt).
+  Wizehire itself serves nothing on any /.well-known/ path, on any host, including the API host scout.wizehire.com.'
+pointer_basis: NO WellKnown pointer and NO SecurityTxt pointer emitted. The single 200 is a vendor document
+  served by Intercom on Intercom's infrastructure under a Wizehire CNAME. Wiring it would credit Wizehire
+  with a discovery surface and a vulnerability-disclosure programme it does not operate - the security team
+  it names is Intercom's, and a researcher following it would not reach Wizehire.
+path_echo_control: passed
+path_echo_control_detail: A negative control request for /.well-known/wizehire-negative-control-7f3ab91c.json
+  - a path that cannot exist - was issued on every host. All five returned 404, so no host echoes paths back
+  as documents and every miss below is a genuine miss.
+hit_count: 0
+vendor_documents:
+- host: https://help.wizehire.com
+  path: /.well-known/security.txt
+  status: 200
+  file: wizehire-help-intercom-security.txt
+  operator: Intercom
+  evidence: 'Canonical: https://app.intercom.com/.well-known/security.txt; Contact: https://bugcrowd.com/intercom,
+    mailto:security@intercom.com'
+  counted_for_wizehire: false
+hosts:
+- host: https://wizehire.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 301
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 403
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/wizehire-negative-control-7f3ab91c.json
+    status: 404
+    note: negative control - a path that cannot exist; 404 confirms this host does not echo paths
+- host: https://www.wizehire.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 301
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 403
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/wizehire-negative-control-7f3ab91c.json
+    status: 404
+    note: negative control - a path that cannot exist; 404 confirms this host does not echo paths
+- host: https://api.wizehire.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/wizehire-negative-control-7f3ab91c.json
+    status: 404
+    note: negative control - a path that cannot exist; 404 confirms this host does not echo paths
+  note: Despite the name this is the Wizehire web application host, not an API host - /openapi.json and /docs
+    both return the 'Log In | Wizehire' page (a soft 200). No API is served here.
+- host: https://scout.wizehire.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/wizehire-negative-control-7f3ab91c.json
+    status: 404
+    note: negative control - a path that cannot exist; 404 confirms this host does not echo paths
+  note: The real API host. Serves OpenAPI 3.1.0 at /openapi.json but nothing under /.well-known/.
+- host: https://help.wizehire.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: wizehire-help-intercom-security.txt
+    note: 200, but the document is Intercom's, not Wizehire's - see vendor_documents. Not counted.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/wizehire-negative-control-7f3ab91c.json
+    status: 404
+    note: negative control - a path that cannot exist; 404 confirms this host does not echo paths
+  note: Intercom-hosted help centre operating under a Wizehire CNAME.

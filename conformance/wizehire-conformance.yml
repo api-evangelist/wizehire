@@ -1,0 +1,118 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/wizehire-scout-service-openapi.yml, security/wizehire-domain-security.yml, and live probes
+  of wizehire.com legal + trust pages, 2026-09-04
+standards:
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme in the contract; the only scheme is HTTPBearer (http/bearer).
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on all five hosts probed.
+- id: http-bearer-rfc6750
+  conforms: true
+  evidence: components.securitySchemes.HTTPBearer is type http, scheme bearer, applied to 4 of 5 operations.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: The only declared error, HTTPValidationError on 422, is application/json with a FastAPI {detail:[{loc,msg,type}]}
+    envelope - not application/problem+json.
+- id: openapi-3.1
+  conforms: true
+  evidence: 'openapi: 3.1.0 at https://scout.wizehire.com/openapi.json, fetched 2026-09-04 (HTTP 200).'
+- id: server-sent-events
+  conforms: true
+  evidence: POST /v1/agent/chat is documented in the contract as returning Server-Sent Events with text deltas
+    and tool-use notifications.
+  caveat: The declared 200 content type is application/json with an empty schema; the SSE event shapes are
+    not machine-readable.
+- id: pagination
+  conforms: false
+  evidence: No limit/offset/cursor/page parameter on any operation.
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key header or parameter anywhere in the contract. See conventions/wizehire-conventions.yml.
+- id: json-api
+  conforms: false
+  evidence: Plain application/json; no JSON:API media type or document structure.
+- id: scim2
+  conforms: false
+  evidence: No SCIM schema URN, /Users or /Groups path in the contract.
+- id: hr-open-standards
+  conforms: false
+  evidence: No HR Open Standards (formerly HR-XML) message type, namespace or schema appears in the contract.
+    The Scout Service models its own Job/Application/Interview shapes. Wizehire moves candidate and hire data
+    into ADP, Gusto, Paychex, Paycor, Paylocity, UKG and Ceridian Dayforce, which is exactly the exchange
+    HR Open Standards addresses, but the integrations are bilateral and Wizehire declares no standard for
+    them.
+  note: 'Reward-only check: recorded as absent, not as a penalty.'
+- id: hr-json
+  conforms: false
+  evidence: No HR-JSON / JobPosting or schema.org hiring vocabulary is declared in the contract.
+- id: dnssec
+  conforms: false
+  evidence: 'security/wizehire-domain-security.yml - dnssec: false on wizehire.com.'
+- id: caa
+  conforms: false
+  evidence: security/wizehire-domain-security.yml - no CAA records on wizehire.com.
+- id: spf
+  conforms: true
+  evidence: 'security/wizehire-domain-security.yml - spf: true on wizehire.com.'
+- id: dmarc
+  conforms: true
+  evidence: 'security/wizehire-domain-security.yml - dmarc: true, policy reject on wizehire.com.'
+- id: hsts
+  conforms: true
+  evidence: wizehire.com sends HSTS with max-age 31536000. Note scout.wizehire.com, the API host, does NOT
+    send HSTS.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on wizehire.com, www.wizehire.com, api.wizehire.com and
+    scout.wizehire.com. The 200 on help.wizehire.com is Intercom's document, not Wizehire's - see well-known/wizehire-well-known.yml.
+domain_standard:
+  market: HR technology / applicant tracking / automated employment decision tools
+  declared_in_contract: false
+  candidates_checked:
+  - HR Open Standards (HR-XML)
+  - HR-JSON
+  - schema.org JobPosting
+  - SCIM 2.0
+  - OData
+  finding: The Scout Service contract declares no domain standard for the hiring market. This is a reward-only
+    dimension, so its absence is recorded rather than penalised.
+regulatory:
+  regime: employment / automated employment decision tools
+  published_claims:
+  - id: nyc-local-law-144-aedt-bias-audit
+    conforms: true
+    evidence: https://trust.app.holisticai.io/public/nyc-bias-audit/org_01KR1BFFNZPW7C1Y8FBGVZSN9R/df8e07a6-7128-4807-aff7-c8c5b1796495
+    evidence_status: 403
+    published_at: https://wizehire.com/ (site footer, link text "AI AEDT Audit")
+    auditor: Holistic AI
+    note: 'Wizehire links a public NYC Local Law 144 AEDT bias audit from its own site footer. The audit is
+      hosted on the auditor''s public trust platform - a legitimate different-domain case, since an independent
+      bias audit is published BY the auditor by design. The target returned HTTP 403 to our crawler on 2026-09-04,
+      so the audit''s contents (impact ratios, audit date, tools covered) were not read and none is asserted
+      here. What is asserted is only what was observed: Wizehire publishes the link.'
+  - id: gdpr
+    conforms: true
+    evidence: https://wizehire.com/gdpr
+    evidence_status: 200
+  - id: ccpa
+    conforms: true
+    evidence: https://wizehire.com/gdpr
+    evidence_status: 200
+    note: The same page is titled GDPR/CCPA in the site footer.
+  - id: eeo-ofccp
+    conforms: true
+    evidence: https://wizehire.com/pricing - the Concierge tier lists "EEO & OFCCP compliance".
+    evidence_status: 200
+    note: A product feature of the top tier, not a company-wide certification claim.
+  not_found:
+  - id: soc2
+    note: No SOC 2 claim found on wizehire.com/trust, wizehire.com/gdpr or any probed page.
+  - id: iso27001
+    note: No ISO 27001 claim found.
+  - id: hipaa
+    note: No HIPAA claim found.
+  - id: pci-dss
+    note: No PCI DSS claim found. Wizehire takes card payment but publishes no PCI posture.

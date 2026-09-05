@@ -1,0 +1,53 @@
+generated: '2026-09-04'
+method: derived
+source: openapi/wizehire-scout-service-openapi.yml + live probes of wizehire.com, 2026-09-04
+note: Wizehire publishes no versioning policy, no deprecation policy, no SLA and no status page. The only
+  lifecycle signal that exists is the URI path prefix in the one published contract. Recorded as absences
+  with the probes that established them - none of these fields is guessed.
+versioning:
+  scheme: uri-path
+  current: v1
+  evidence: Four of five Scout Service paths are prefixed /v1/; /healthz is unversioned.
+  info_version: 0.1.0
+  note: info.version (0.1.0) and the URI version (v1) disagree. No version-negotiation header is declared.
+  docs: null
+  policy_url: null
+deprecation:
+  policy_url: null
+  sunset_header: null
+  deprecation_header: null
+  evidence: No RFC 8594 Sunset or Deprecation header is declared anywhere in the contract and no deprecation
+    policy page was found. https://wizehire.com/changelog returned 404 on 2026-09-04.
+sla:
+  url: null
+  uptime_target: null
+  evidence: No SLA or uptime commitment is published. The Concierge tier advertises a "dedicated strategic
+    relationship manager" on the pricing page but states no availability target.
+status_page: null
+status_page_evidence: status.wizehire.com does not resolve (NXDOMAIN) and https://wizehire.com/status returned
+  404, both probed 2026-09-04. No third-party status page (statuspage.io, status.io, instatus) was found for
+  Wizehire.
+health_endpoint:
+  operation: healthz
+  path: /healthz
+  host: https://scout.wizehire.com
+  authenticated: false
+  note: The contract exposes an unauthenticated health probe returning {status, environment}. It is the closest
+    thing to an availability signal Wizehire publishes, and it covers only the Scout Service.
+deprecated_operations: []
+deprecated_operations_evidence: 'No operation in the contract carries deprecated: true.'
+release_communication:
+  changelog: null
+  substitutes:
+  - url: https://wizehire.com/newsroom
+    kind: newsroom
+    status: 200
+    note: Press releases and product announcements - undated feature list, not a versioned changelog.
+  - url: https://wizehire.com/wizehire-works-2025
+    kind: annual product recap
+    status: 200
+  - url: https://wizehire.com/wizehire-works-2024
+    kind: annual product recap
+    status: 200
+  note: Product change is communicated in annual marketing recaps and the newsroom. Neither is a dated, per-release
+    changelog, so no changelog/ artifact and no ChangeLog pointer were emitted.

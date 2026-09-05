@@ -1,0 +1,41 @@
+generated: '2026-09-04'
+method: searched
+source: https://zapier.com/apps/wizehire/integrations, https://wizehire.com/integrations, help.wizehire.com
+spec_type: null
+asyncapi_published: false
+note: Wizehire publishes no AsyncAPI document. Probed /asyncapi.yaml and /asyncapi.json on wizehire.com and
+  scout.wizehire.com and checked the GitHub org - nothing. A real event surface does exist, but it is reachable
+  only through Zapier, and it is described on zapier.com rather than by Wizehire.
+pointer_basis: NO Webhooks pointer emitted, and NO AsyncAPI pointer. The three triggers below are listed on
+  Zapier's own catalogue page. Wizehire's own site, help centre and integrations page never use the words
+  webhook or event, and nothing was found saying whether the triggers are REST hooks Wizehire pushes or polling
+  Zapier performs. A Webhooks pointer asserts the PROVIDER advertises a webhook surface, and Wizehire does
+  not. Recorded as a surface, not claimed as a pointer.
+events:
+- name: New Applicant
+  kind: trigger
+  delivery: zapier
+  description: Trigger when a new applicant applies for one of your jobs on Wizehire.
+  source: https://zapier.com/apps/wizehire/integrations
+- name: Application Is Completed
+  kind: trigger
+  delivery: zapier
+  description: Trigger when an applicant finishes their assessment on Wizehire.
+  source: https://zapier.com/apps/wizehire/integrations
+- name: Applicant Stage Change
+  kind: trigger
+  delivery: zapier
+  description: Triggers when an applicant is moved to a new stage within your hiring pipeline.
+  source: https://zapier.com/apps/wizehire/integrations
+actions: []
+actions_note: The Zapier app exposes triggers only - no actions. Data flows out of Wizehire, never in.
+authentication:
+  mechanism: api-key
+  note: The Zapier connection authenticates with a per-account API key found in the Wizehire dashboard under
+    your name > Settings > Integrations. The key is issued in-app to a paying customer; there is no self-serve
+    developer signup and no published endpoint reference for it.
+  evidence:
+  - https://help.wizehire.com/en/articles/2628723-can-i-connect-my-crm-to-wizehire-using-zapier
+gap: 'Three well-defined lifecycle events with no published payload schema, no delivery contract, no retry
+  or signing policy, and no way to subscribe outside Zapier. This is the single clearest artifact Wizehire
+  could publish to become machine-integrable: the events already exist and are already named.'

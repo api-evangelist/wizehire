@@ -1,0 +1,27 @@
+generated: '2026-09-04'
+method: searched
+source: https://scout.wizehire.com/openapi.json + https://wizehire.com/pricing + help.wizehire.com, probed
+  2026-09-04
+limit_count: 0
+note: Wizehire publishes no rate limits. This is a recorded zero, not an unchecked field. The Scout Service
+  OpenAPI declares no 429 response on any of its five operations and no rate-limit headers; the pricing page
+  meters job postings and markets, not API calls; the help centre has no API section. An agent calling this
+  API cannot tell in advance what it is allowed to do, and cannot tell at runtime how much budget is left.
+limits: []
+response_headers:
+  observed: []
+  documented: []
+  note: 'No X-RateLimit-*, RateLimit-* or Retry-After header is declared in the contract. Headers were not
+    observed live either: every state-changing operation requires a bearer token we do not hold, and the one
+    unauthenticated operation (/healthz) is a health probe.'
+status_on_exhaustion: null
+status_on_exhaustion_evidence: No 429 or 503 response is declared on any operation.
+quota_surface:
+  metered_units:
+  - active job postings
+  - active markets
+  - locations
+  source: https://wizehire.com/pricing
+  note: The commercial meter is seats-and-postings, not requests. Quickstart allows 3 active job postings
+    and 1 market; Growth allows 6 and 2; Concierge is custom. These bound the DATA an API caller can reach,
+    but they are not request-rate limits.

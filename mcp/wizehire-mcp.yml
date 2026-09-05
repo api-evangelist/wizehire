@@ -1,0 +1,53 @@
+generated: '2026-09-04'
+method: derived
+status: candidate
+source: openapi/wizehire-scout-service-openapi.yml
+note: 'Wizehire ships NO MCP server. Searched 2026-09-04: no @wizehire or wizehire package on npm, nothing
+  in the public GitHub org, no MCP mention in llms.txt, the help centre or the integrations page, and no hosted
+  endpoint at any Wizehire host. The tools below are DERIVED from the four authenticated Scout Service operations
+  as a candidate shape - nobody can call them today. The endpoint field is deliberately empty; no URL is guessed.'
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: derived
+  note: 'mode: none - this is our candidate, not a Wizehire product. If Wizehire ever ships one, the Scout
+    Service already has the shape for it: a bearer-authenticated agent backend with a human-in-the-loop approval
+    gate built into the contract.'
+server:
+  name: wizehire-scout
+  transport: null
+  url: null
+tools:
+- name: chat_with_scout
+  description: Send a message to the Scout AI recruiting agent and receive a streaming response.
+  source_operation: openapi/wizehire-scout-service-openapi.yml#agentChat
+  input_schema_source: components.schemas.AgentChatRequest
+  write: true
+  note: Streams Server-Sent Events. Can pause for human approval and be resumed with a ResumePayload.
+- name: get_top_candidates
+  description: Get the top candidates by fit score for a job.
+  source_operation: openapi/wizehire-scout-service-openapi.yml#get_top_applies_v1_candidates_top__job_key__get
+  input_schema_source: path parameter job_key (string)
+  write: false
+- name: get_application
+  description: Get applied details for a candidate by apply ID.
+  source_operation: openapi/wizehire-scout-service-openapi.yml#get_apply_details_v1_candidates__apply_id__get
+  input_schema_source: path parameter apply_id (integer)
+  write: false
+- name: schedule_interview
+  description: Schedule a phone, video or in-person interview for an application.
+  source_operation: openapi/wizehire-scout-service-openapi.yml#schedule_interview_v1_interviews_schedule_post
+  input_schema_source: components.schemas.ScheduleInterviewRequest
+  write: true
+  note: Irreversible through this API - no cancel or reschedule operation exists. See the reversibility block
+    in conventions/wizehire-conventions.yml.
+excluded_operations:
+- operation: healthz
+  reason: Service health probe; not a useful agent tool.
+crosswalk: null
+crosswalk_note: No mcp/wizehire-tool-crosswalk.yml was written. A crosswalk binds a PUBLISHED MCP tool list
+  (or GraphQL schema) to the OpenAPI. Wizehire publishes neither, so a crosswalk here would just restate the
+  derived list above against itself and would read as evidence of a divergence we never observed.

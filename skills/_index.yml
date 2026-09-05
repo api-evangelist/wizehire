@@ -1,0 +1,36 @@
+generated: '2026-09-04'
+method: generated
+source: openapi/wizehire-scout-service-openapi.yml
+note: >-
+  Three skills covering the whole non-health surface of the only contract Wizehire publishes. Every
+  operationId below was grepped out of openapi/wizehire-scout-service-openapi.yml; none is invented.
+  Wizehire publishes no AGENTS.md and no skill files of its own - searched wizehire.com,
+  help.wizehire.com and github.com/WizeHire on 2026-09-04.
+skills:
+- file: wizehire-review-top-candidates.md
+  name: Review top candidates for a Wizehire job
+  api: openapi/wizehire-scout-service-openapi.yml
+  operations:
+  - get_top_applies_v1_candidates_top__job_key__get
+  - get_apply_details_v1_candidates__apply_id__get
+  write: false
+- file: wizehire-schedule-interview.md
+  name: Schedule a Wizehire interview
+  api: openapi/wizehire-scout-service-openapi.yml
+  operations:
+  - get_apply_details_v1_candidates__apply_id__get
+  - schedule_interview_v1_interviews_schedule_post
+  write: true
+  irreversible: true
+  note: >-
+    No cancel operation exists and no idempotency key is supported, so the skill requires explicit user
+    confirmation before the write and forbids retrying an ambiguous failure.
+- file: wizehire-scout-agent-turn.md
+  name: Drive a Wizehire Scout agent conversation
+  api: openapi/wizehire-scout-service-openapi.yml
+  operations:
+  - agentChat
+  write: true
+  note: >-
+    Covers the human-in-the-loop pause/resume contract, which is declared in the OpenAPI itself
+    (ResumePayload) and is the strongest agent-safety signal in Wizehire's surface.
