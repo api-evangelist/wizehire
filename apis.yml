@@ -27,9 +27,8 @@ tags:
 - Talent Assessment
 - Small Business
 - Artificial Intelligence
-- Job Boards
+- Job Board
 - Onboarding
-- HR Tech
 tags_raw:
 - hiring
 - recruiting
@@ -48,6 +47,8 @@ apis:
   humanURL: https://scout.wizehire.com/docs
   baseURL: https://scout.wizehire.com
   tags:
+  - Agents
+  tags_raw:
   - agent
   properties:
   - type: OpenAPI
@@ -68,6 +69,8 @@ apis:
   humanURL: https://scout.wizehire.com/docs
   baseURL: https://scout.wizehire.com
   tags:
+  - Candidates
+  tags_raw:
   - candidates
   properties:
   - type: OpenAPI
@@ -88,6 +91,8 @@ apis:
   humanURL: https://scout.wizehire.com/docs
   baseURL: https://scout.wizehire.com
   tags:
+  - Health
+  tags_raw:
   - health
   properties:
   - type: OpenAPI
@@ -108,6 +113,8 @@ apis:
   humanURL: https://scout.wizehire.com/docs
   baseURL: https://scout.wizehire.com
   tags:
+  - Interviews
+  tags_raw:
   - interviews
   properties:
   - type: OpenAPI
