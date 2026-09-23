@@ -1,3 +1,5 @@
+# x-archived-from: wizehire-scout-service-openapi.yml
+# x-archived-on: 2026-09-16
 # Harvested verbatim from https://scout.wizehire.com/openapi.json on 2026-09-04 (HTTP 200, application/json).
 # Original bytes preserved at openapi/_original/wizehire-scout-service-openapi.json.
 # Two additions by API Evangelist, both captured in overlays/wizehire-scout-service-overlay.yaml:

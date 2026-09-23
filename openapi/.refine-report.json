@@ -1,0 +1,32 @@
+{
+  "provider": "wizehire",
+  "sources": [
+    "_original/wizehire-scout-service-openapi.json"
+  ],
+  "outputs": [
+    "wizehire-agent-api-openapi.yml",
+    "wizehire-candidates-api-openapi.yml",
+    "wizehire-health-api-openapi.yml",
+    "wizehire-interviews-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "wizehire-scout-service-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "wizehire-scout-service-openapi.json: declared missing tag: agent",
+    "wizehire-scout-service-openapi.json: declared missing tag: candidates",
+    "wizehire-scout-service-openapi.json: declared missing tag: health",
+    "wizehire-scout-service-openapi.json: declared missing tag: interviews",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/wizehire-scout-service-openapi.yml: archived document superseded by a larger archived document",
+    "wizehire-agent-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wizehire-candidates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wizehire-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wizehire-interviews-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

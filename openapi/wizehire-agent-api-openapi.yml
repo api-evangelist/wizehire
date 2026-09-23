@@ -1,0 +1,256 @@
+openapi: 3.2.0
+info:
+  title: Scout Service Agent API
+  description: Backend service for the Scout Chrome Extension — AI-powered recruiting assistant
+  version: 0.1.0
+tags:
+- name: Agent
+paths:
+  /v1/agent/chat:
+    post:
+      tags:
+      - Agent
+      summary: Agent Chat
+      description: 'Send a message to the Scout AI agent and receive a streaming response.
+
+
+        Returns Server-Sent Events (SSE) with the agent''s response, including
+
+        text deltas and tool use notifications.'
+      operationId: agentChat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentChatRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+components:
+  schemas:
+    QuickReply:
+      properties:
+        label:
+          type: string
+          title: Label
+        value:
+          type: string
+          title: Value
+      type: object
+      required:
+      - label
+      - value
+      title: QuickReply
+      description: A quick reply option with a display label and a value sent as the message.
+    HistoryToolCall:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        args:
+          additionalProperties: true
+          type: object
+          title: Args
+      type: object
+      required:
+      - id
+      - name
+      title: HistoryToolCall
+      description: A tool invocation recorded in the conversation history.
+    AgentChatRequest:
+      properties:
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+          description: The user's natural language message. Optional only when `resume` is set — resumed turns pick up from checkpointer state and have no new user input.
+        session_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Session Id
+          description: Stable ID grouping all messages in one chat thread. The extension mints a UUID per new chat and rotates it on reset so multi-turn conversations land together in Langfuse's Sessions view. Also doubles as the LangGraph thread_id so paused turns can resume.
+        context:
+          anyOf:
+          - $ref: '#/components/schemas/AgentContext'
+          - type: 'null'
+          description: Page context from the Chrome extension
+        conversation_history:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/HistoryMessage'
+            type: array
+          - type: 'null'
+          title: Conversation History
+          description: Previous messages for multi-turn conversations
+        resume:
+          anyOf:
+          - $ref: '#/components/schemas/ResumePayload'
+          - type: 'null'
+          description: Set to resume a turn that was paused for human review. Requires the same `session_id` as the paused turn so the checkpointer can look up its state.
+      type: object
+      title: AgentChatRequest
+    ResumePayload:
+      properties:
+        value:
+          additionalProperties: true
+          type: object
+          title: Value
+          description: Opaque resume payload forwarded to the LangGraph node.
+      type: object
+      title: ResumePayload
+      description: 'Client-side approval to resume a paused agent turn.
+
+
+        v1 contract: any resume means "approved, continue." `value` is reserved
+
+        for future decision shapes (e.g. operator overrides, modified args) and
+
+        is passed verbatim into LangGraph''s `Command(resume=...)`.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HistoryMessage:
+      properties:
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          - tool
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        tool_calls:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/HistoryToolCall'
+            type: array
+          - type: 'null'
+          title: Tool Calls
+        tool_call_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tool Call Id
+      type: object
+      required:
+      - role
+      title: HistoryMessage
+      description: 'A single prior-turn message the client sends back on each request.
+
+
+        Carries enough to rehydrate the LangChain message list the agent expects:
+
+        - `role="user"` → HumanMessage
+
+        - `role="assistant"` with `content` only → AIMessage (text reply)
+
+        - `role="assistant"` with `tool_calls` → AIMessage recording a tool invocation
+
+        - `role="tool"` with `tool_call_id` → ToolMessage (tool''s response)
+
+
+        The old `{role, content}` shape still validates — new fields are optional.'
+    AgentContext:
+      properties:
+        job_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Job Key
+        apply_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Apply Id
+        page:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Page
+        candidate_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Candidate Name
+        job_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Job Title
+        registry_set:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Registry Set
+        user_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: User Id
+        quick_replies:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/QuickReply'
+            type: array
+          - type: 'null'
+          title: Quick Replies
+      type: object
+      title: AgentContext
+      description: Optional context from the Chrome extension about the current page.
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

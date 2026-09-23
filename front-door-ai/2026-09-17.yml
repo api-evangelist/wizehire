@@ -1,0 +1,29 @@
+# Front Door AI Index — wizehire — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: wizehire
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: wizehire.com
+  final_host: wizehire.com
+  ownership: own
+  owner: wizehire
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 36
+  host_score: 36
+  density: 17.09
+  words: 2106
+  tiers:
+    agentic: 4
+    core: 27
+    model: 5
+  ambiguous: 2
+  top_terms:
+    AI: 27
+    ChatGPT: 5
+    AI assistant: 3
+    agent: 2
+    AI agent: 1

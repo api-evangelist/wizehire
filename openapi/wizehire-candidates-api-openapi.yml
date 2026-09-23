@@ -1,0 +1,105 @@
+openapi: 3.2.0
+info:
+  title: Scout Service Candidates API
+  description: Backend service for the Scout Chrome Extension — AI-powered recruiting assistant
+  version: 0.1.0
+tags:
+- name: Candidates
+paths:
+  /v1/candidates/top/{job_key}:
+    get:
+      tags:
+      - Candidates
+      summary: Get Top Applies
+      description: Get the top candidates by fit score for a job.
+      operationId: get_top_applies_v1_candidates_top__job_key__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: job_key
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Key
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/candidates/{apply_id}:
+    get:
+      tags:
+      - Candidates
+      summary: Get Apply Details
+      description: Get applied details for a candidate by apply ID.
+      operationId: get_apply_details_v1_candidates__apply_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: apply_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Apply Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

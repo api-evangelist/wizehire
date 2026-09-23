@@ -1,0 +1,40 @@
+openapi: 3.2.0
+info:
+  title: Scout Service Health API
+  description: Backend service for the Scout Chrome Extension — AI-powered recruiting assistant
+  version: 0.1.0
+tags:
+- name: Health
+paths:
+  /healthz:
+    get:
+      tags:
+      - Health
+      summary: Healthz
+      operationId: healthz
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+components:
+  schemas:
+    HealthResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          default: ok
+        environment:
+          type: string
+          title: Environment
+      type: object
+      required:
+      - environment
+      title: HealthResponse
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
