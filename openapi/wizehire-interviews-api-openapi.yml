@@ -40,6 +40,34 @@ paths:
       - HTTPBearer: []
 components:
   schemas:
+    InterviewType:
+      type: string
+      enum:
+      - phone
+      - video
+      - in_person
+      title: InterviewType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ScheduleInterviewRequest:
+      properties:
+        apply_id:
+          type: integer
+          title: Apply Id
+        interview_type:
+          $ref: '#/components/schemas/InterviewType'
+      type: object
+      required:
+      - apply_id
+      - interview_type
+      title: ScheduleInterviewRequest
     ValidationError:
       properties:
         loc:
@@ -66,34 +94,6 @@ components:
       - msg
       - type
       title: ValidationError
-    InterviewType:
-      type: string
-      enum:
-      - phone
-      - video
-      - in_person
-      title: InterviewType
-    ScheduleInterviewRequest:
-      properties:
-        apply_id:
-          type: integer
-          title: Apply Id
-        interview_type:
-          $ref: '#/components/schemas/InterviewType'
-      type: object
-      required:
-      - apply_id
-      - interview_type
-      title: ScheduleInterviewRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     HTTPBearer:
       type: http

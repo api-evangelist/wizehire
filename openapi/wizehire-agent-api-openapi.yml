@@ -40,38 +40,32 @@ paths:
       - HTTPBearer: []
 components:
   schemas:
-    QuickReply:
+    ValidationError:
       properties:
-        label:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Label
-        value:
+          title: Message
+        type:
           type: string
-          title: Value
-      type: object
-      required:
-      - label
-      - value
-      title: QuickReply
-      description: A quick reply option with a display label and a value sent as the message.
-    HistoryToolCall:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        args:
-          additionalProperties: true
+          title: Error Type
+        input:
+          title: Input
+        ctx:
           type: object
-          title: Args
+          title: Context
       type: object
       required:
-      - id
-      - name
-      title: HistoryToolCall
-      description: A tool invocation recorded in the conversation history.
+      - loc
+      - msg
+      - type
+      title: ValidationError
     AgentChatRequest:
       properties:
         message:
@@ -106,103 +100,6 @@ components:
           description: Set to resume a turn that was paused for human review. Requires the same `session_id` as the paused turn so the checkpointer can look up its state.
       type: object
       title: AgentChatRequest
-    ResumePayload:
-      properties:
-        value:
-          additionalProperties: true
-          type: object
-          title: Value
-          description: Opaque resume payload forwarded to the LangGraph node.
-      type: object
-      title: ResumePayload
-      description: 'Client-side approval to resume a paused agent turn.
-
-
-        v1 contract: any resume means "approved, continue." `value` is reserved
-
-        for future decision shapes (e.g. operator overrides, modified args) and
-
-        is passed verbatim into LangGraph''s `Command(resume=...)`.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HistoryMessage:
-      properties:
-        role:
-          type: string
-          enum:
-          - user
-          - assistant
-          - tool
-          title: Role
-        content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Content
-        tool_calls:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/HistoryToolCall'
-            type: array
-          - type: 'null'
-          title: Tool Calls
-        tool_call_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tool Call Id
-      type: object
-      required:
-      - role
-      title: HistoryMessage
-      description: 'A single prior-turn message the client sends back on each request.
-
-
-        Carries enough to rehydrate the LangChain message list the agent expects:
-
-        - `role="user"` → HumanMessage
-
-        - `role="assistant"` with `content` only → AIMessage (text reply)
-
-        - `role="assistant"` with `tool_calls` → AIMessage recording a tool invocation
-
-        - `role="tool"` with `tool_call_id` → ToolMessage (tool''s response)
-
-
-        The old `{role, content}` shape still validates — new fields are optional.'
     AgentContext:
       properties:
         job_key:
@@ -250,6 +147,109 @@ components:
       type: object
       title: AgentContext
       description: Optional context from the Chrome extension about the current page.
+    ResumePayload:
+      properties:
+        value:
+          additionalProperties: true
+          type: object
+          title: Value
+          description: Opaque resume payload forwarded to the LangGraph node.
+      type: object
+      title: ResumePayload
+      description: 'Client-side approval to resume a paused agent turn.
+
+
+        v1 contract: any resume means "approved, continue." `value` is reserved
+
+        for future decision shapes (e.g. operator overrides, modified args) and
+
+        is passed verbatim into LangGraph''s `Command(resume=...)`.'
+    HistoryMessage:
+      properties:
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          - tool
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        tool_calls:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/HistoryToolCall'
+            type: array
+          - type: 'null'
+          title: Tool Calls
+        tool_call_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tool Call Id
+      type: object
+      required:
+      - role
+      title: HistoryMessage
+      description: 'A single prior-turn message the client sends back on each request.
+
+
+        Carries enough to rehydrate the LangChain message list the agent expects:
+
+        - `role="user"` → HumanMessage
+
+        - `role="assistant"` with `content` only → AIMessage (text reply)
+
+        - `role="assistant"` with `tool_calls` → AIMessage recording a tool invocation
+
+        - `role="tool"` with `tool_call_id` → ToolMessage (tool''s response)
+
+
+        The old `{role, content}` shape still validates — new fields are optional.'
+    QuickReply:
+      properties:
+        label:
+          type: string
+          title: Label
+        value:
+          type: string
+          title: Value
+      type: object
+      required:
+      - label
+      - value
+      title: QuickReply
+      description: A quick reply option with a display label and a value sent as the message.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HistoryToolCall:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        args:
+          additionalProperties: true
+          type: object
+          title: Args
+      type: object
+      required:
+      - id
+      - name
+      title: HistoryToolCall
+      description: A tool invocation recorded in the conversation history.
   securitySchemes:
     HTTPBearer:
       type: http
