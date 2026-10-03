@@ -40,13 +40,6 @@ paths:
       - HTTPBearer: []
 components:
   schemas:
-    InterviewType:
-      type: string
-      enum:
-      - phone
-      - video
-      - in_person
-      title: InterviewType
     HTTPValidationError:
       properties:
         detail:
@@ -68,6 +61,13 @@ components:
       - apply_id
       - interview_type
       title: ScheduleInterviewRequest
+    InterviewType:
+      type: string
+      enum:
+      - phone
+      - video
+      - in_person
+      title: InterviewType
     ValidationError:
       properties:
         loc:

@@ -40,32 +40,55 @@ paths:
       - HTTPBearer: []
 components:
   schemas:
-    ValidationError:
+    ResumePayload:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
+        value:
+          additionalProperties: true
           type: object
-          title: Context
+          title: Value
+          description: Opaque resume payload forwarded to the LangGraph node.
+      type: object
+      title: ResumePayload
+      description: 'Client-side approval to resume a paused agent turn.
+
+
+        v1 contract: any resume means "approved, continue." `value` is reserved
+
+        for future decision shapes (e.g. operator overrides, modified args) and
+
+        is passed verbatim into LangGraph''s `Command(resume=...)`.'
+    QuickReply:
+      properties:
+        label:
+          type: string
+          title: Label
+        value:
+          type: string
+          title: Value
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - label
+      - value
+      title: QuickReply
+      description: A quick reply option with a display label and a value sent as the message.
+    HistoryToolCall:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        args:
+          additionalProperties: true
+          type: object
+          title: Args
+      type: object
+      required:
+      - id
+      - name
+      title: HistoryToolCall
+      description: A tool invocation recorded in the conversation history.
     AgentChatRequest:
       properties:
         message:
@@ -100,6 +123,15 @@ components:
           description: Set to resume a turn that was paused for human review. Requires the same `session_id` as the paused turn so the checkpointer can look up its state.
       type: object
       title: AgentChatRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     AgentContext:
       properties:
         job_key:
@@ -147,23 +179,6 @@ components:
       type: object
       title: AgentContext
       description: Optional context from the Chrome extension about the current page.
-    ResumePayload:
-      properties:
-        value:
-          additionalProperties: true
-          type: object
-          title: Value
-          description: Opaque resume payload forwarded to the LangGraph node.
-      type: object
-      title: ResumePayload
-      description: 'Client-side approval to resume a paused agent turn.
-
-
-        v1 contract: any resume means "approved, continue." `value` is reserved
-
-        for future decision shapes (e.g. operator overrides, modified args) and
-
-        is passed verbatim into LangGraph''s `Command(resume=...)`.'
     HistoryMessage:
       properties:
         role:
@@ -209,47 +224,32 @@ components:
 
 
         The old `{role, content}` shape still validates — new fields are optional.'
-    QuickReply:
+    ValidationError:
       properties:
-        label:
-          type: string
-          title: Label
-        value:
-          type: string
-          title: Value
-      type: object
-      required:
-      - label
-      - value
-      title: QuickReply
-      description: A quick reply option with a display label and a value sent as the message.
-    HTTPValidationError:
-      properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    HistoryToolCall:
-      properties:
-        id:
+          title: Location
+        msg:
           type: string
-          title: Id
-        name:
+          title: Message
+        type:
           type: string
-          title: Name
-        args:
-          additionalProperties: true
+          title: Error Type
+        input:
+          title: Input
+        ctx:
           type: object
-          title: Args
+          title: Context
       type: object
       required:
-      - id
-      - name
-      title: HistoryToolCall
-      description: A tool invocation recorded in the conversation history.
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     HTTPBearer:
       type: http
