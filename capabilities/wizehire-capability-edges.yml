@@ -1,0 +1,44 @@
+slug: wizehire
+provider: WizeHire
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Candidates
+  spec_file: wizehire-candidates-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.88
+  evidence: GET /v1/candidates/top/{job_key}  Get Top Applies
+  reason: Retrieval of top applicants and application details for a job is applicant tracking / candidate
+    screening, squarely talent acquisition.
+- tag: Interviews
+  spec_file: wizehire-interviews-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.85
+  evidence: POST /v1/interviews/schedule  Schedule Interview
+  reason: Interview scheduling within a hiring platform is a core recruiting step, mapping to Talent Acquisition
+    Management.
+- tag: Agent
+  spec_file: wizehire-agent-api-openapi.yml
+  capability_id: BC-300.10
+  capability_id_l1: BC-300
+  capability_name: Talent Acquisition Management
+  confidence: 0.72
+  evidence: 'Backend service for the Scout Chrome Extension — AI-powered recruiting assistant; schemas:
+    ResumePayload, AgentChatRequest'
+  reason: The agent chat endpoint is the conversational interface of a recruiting assistant operating
+    on resumes, supporting sourcing/screening work; it is AI-delivered but the business function realised
+    is talent acquisition.
