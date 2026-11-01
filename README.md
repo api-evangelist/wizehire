@@ -64,28 +64,136 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Wizehire is a Houston, Texas hiring platform for small and mid-size businesses, combining an applicant
-tracking system with AI candidate matching (Talent Match), an AI recruiting assistant delivered as a Chrome
-extension (Scout), DISC+ assessments, candidate texting, interview scheduling, human hiring coaches, and
-employee onboarding.
+Wizehire is a Houston, Texas hiring platform for small and mid-size businesses that combines an applicant tracking system with AI candidate matching (Talent Match), an AI recruiting assistant delivered as a Chrome extension (Scout), DISC+ personality and skills assessments, candidate texting, interview scheduling, expert human hiring coaches, and employee onboarding. Job posts syndicate to 100+ boards including Indeed, LinkedIn and ZipRecruiter, and the platform connects to HRIS, payroll, background-check and e-signature systems — ADP Workforce Now, RUN Powered by ADP, Ceridian Dayforce, Gusto, Paychex, Paycor, Paylocity, UKG, QuickBooks, Checkr and Dropbox Sign — plus Zapier and real-estate CRMs via a customer-issued API key. Wizehire serves real estate, insurance, dental, legal, automotive and hospitality operators, and publishes an NYC Local Law 144 AEDT bias audit for its automated employment decision tooling.
 
-## API surface
+**Areas:** Hiring · Recruiting · Applicant Tracking · Human Resources · Talent Assessment · Small Business · Artificial Intelligence · Job Board · Onboarding
 
-Wizehire runs no developer programme — there is no developer portal, no public API reference, no SDK, no
-CLI, and no MCP server. It does, however, serve one real machine-readable contract:
+## WizeHire on APIs.io
 
-- **Scout Service API** — OpenAPI 3.1.0, five operations, live at
-  [`https://scout.wizehire.com/openapi.json`](https://scout.wizehire.com/openapi.json) with a Swagger UI at
-  [`/docs`](https://scout.wizehire.com/docs). It is the backend for the Scout Chrome extension: a streaming
-  agent-chat endpoint with a human-in-the-loop approval gate declared in the contract itself, top-candidate
-  retrieval by fit score, application detail lookup, and interview scheduling proxied to the ATS. HTTP
-  Bearer auth on four of the five operations.
+Everything profiled for WizeHire is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/wizehire/](https://apis.io/providers/wizehire/)** — or go straight to one of the APIs or properties below.
 
-Two further surfaces exist but are not machine-readable: a per-customer API key issued in the Wizehire
-dashboard (Settings → Integrations) used to connect Zapier and real-estate CRMs, and three applicant
-lifecycle triggers published on Zapier's catalogue rather than by Wizehire.
+### APIs (4)
 
-Wizehire publishes an NYC Local Law 144 AEDT bias audit, linked from its own site footer as "AI AEDT Audit".
+- [WizeHire Agent API](https://apis.io/apis/wizehire/wizehire-agent-api/) — The agent API from WizeHire — 1 operation(s) for agent.
+- [WizeHire Candidates API](https://apis.io/apis/wizehire/wizehire-candidates-api/) — The candidates API from WizeHire — 2 operation(s) for candidates.
+- [WizeHire Health API](https://apis.io/apis/wizehire/wizehire-health-api/) — The health API from WizeHire — 1 operation(s) for health.
+- [WizeHire Interviews API](https://apis.io/apis/wizehire/wizehire-interviews-api/) — The interviews API from WizeHire — 1 operation(s) for interviews.
 
-- Website: https://wizehire.com/
-- Secondary-market listing this profile was seeded from: https://forgeglobal.com/wizehire_stock/
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Wizehire Events](https://apis.io/asyncapis/wizehire/wizehire-events/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [wizehire-scout](https://apis.io/servers/wizehire/wizehire-scout/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Wizehire Agentic Access](https://apis.io/agentic-access/wizehire/wizehire-agentic-access/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Wizehire Scout Service Overlay](https://apis.io/overlays/wizehire/wizehire-scout-service-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Wizehire Authentication](https://apis.io/security/wizehire/wizehire-authentication/)
+- [Wizehire Domain Security](https://apis.io/security/wizehire/wizehire-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Wizehire Plans Pricing](https://apis.io/plans/wizehire/wizehire-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Wizehire Rate Limits](https://apis.io/rate-limits/wizehire/wizehire-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://wizehire.com/)
+- [Documentation](https://help.wizehire.com/en/)
+- [Getting started](https://wizehire.com/how-it-works)
+- [API reference](https://scout.wizehire.com/docs)
+- [Pricing](https://wizehire.com/pricing)
+- [Sign up](https://wizehire.com/signup)
+- [Support](https://help.wizehire.com/en/)
+- [Blog](https://wizehire.com/blog)
+- [Compliance](https://wizehire.com/gdpr)
+- [Terms of service](https://wizehire.com/terms)
+- [Privacy policy](https://wizehire.com/privacy-policy)
+- [GitHub](https://github.com/WizeHire)
+
+## API Evangelist rating
+
+**Kin Score 51.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 50.0 |
+| Contract governance | 4.5 |
+| Operational transparency | 13.2 |
+| Developer ergonomics | 58.9 |
+| Access clarity | 84.2 |
+
+**Agent readiness 32.2** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 27.3** — Employment & Payroll
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/wizehire/](https://apis.io/providers/wizehire/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for WizeHire: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/wizehire/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
